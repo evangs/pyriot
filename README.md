@@ -22,6 +22,8 @@ Example
 
 Wrapper Functions
 -----------------
+For more in-depth documentation, look at the source code pyriot/wrapper.py
+
 *champions(region, free_to_play=False)*
 + region - use the region constants in wrapper.py
 + free_to_play - flag when set to true only returns free to play champions
