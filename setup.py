@@ -6,5 +6,5 @@ setup(name='pyriot',
       author_email='esailer@asu.edu',
       url='http://ehom.co',
       packages=['pyriot'],
-      install_requires=['requests==2.1.0',],
+      install_requires=['requests==2.1.0','pytz==2013.8',],
       )

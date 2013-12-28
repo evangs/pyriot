@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import utils
+
 class Summoner(object):
     """
     id              long        Summoner ID.
@@ -8,12 +10,12 @@ class Summoner(object):
     revisionDate    long        Date summoner was last modified specified as epoch milliseconds.
     summonerLevel   long        Summoner level associated with the summoner.
     """
-    def __init__(self, summoner_id, name, profile_icon_id, revision_date, summoner_level):
-        self.id = summoner_id
-        self.name = name
-        self.profile_icon_id = profile_icon_id
-        self.revision_date = revision_date
-        self.summoner_level = summoner_level
+    def __init__(self, **kwargs):
+        self.id = kwargs['id']
+        self.name = kwargs['name']
+        self.profile_icon_id = kwargs['profileIconId']
+        self.revision_date = utils.convert_epoch_millis_to_datetime(kwargs['revisionDate'])
+        self.summoner_level = kwargs['summonerLevel']
 
 
 class Champion(object):
@@ -30,28 +32,24 @@ class Champion(object):
     name                string      Champion name.
     rankedPlayEnabled   boolean     Ranked play enabled flag.
     """
-    def __init__(self, active, attack_rank, bot_enabled, 
-            bot_mm_enabled, defense_rank, difficulty_rank, 
-            free_to_play, champion_id, magic_rank, name,
-            ranked_play_enabled):
-        self.active = active
-        self.attack_rank = attack_rank
-        self.bot_enabled = bot_enabled
-        self.bot_mm_enabled = bot_mm_enabled
-        self.defense_rank = defense_rank
-        self.difficulty_rank = difficulty_rank
-        self.free_to_play = free_to_play
-        self.id = champion_id
-        self.magic_rank = magic_rank
-        self.name = name
-        self.ranked_play_enabled = ranked_play_enabled
+    def __init__(self, **kwargs):
+        self.active = kwargs['active']
+        self.attack_rank = kwargs['attackRank']
+        self.bot_enabled = kwargs['botEnabled']
+        self.bot_mm_enabled = kwargs['botMmEnabled']
+        self.defense_rank = kwargs['defenseRank']
+        self.difficulty_rank = kwargs['difficultyRank']
+        self.free_to_play = kwargs['freeToPlay']
+        self.id = kwargs['id']
+        self.magic_rank = kwargs['magicRank']
+        self.name = kwargs['name']
+        self.ranked_play_enabled = kwargs['rankedPlayEnabled']
 
 
 class Game(object):
     """
     championId      int                 Champion ID associated with game.
     createDate      long                Date that end game data was recorded, specified as epoch milliseconds.
-    createDateStr   Date                Human readable string representing date that end game data was recorded.
     fellowPlayers   List[PlayerDto]     Other players associated with the game.
     gameId          long                Game ID.
     gameMode        string              Game mode.
@@ -65,23 +63,31 @@ class Game(object):
     subType         string              Game sub-type.
     teamId          int                 Team ID associated with game.
     """
-    def __init__(self, champion_id, create_date, fellow_players, 
-            game_id, game_mode, game_type, invalid, level, map_id,
-            spell1, spell2, statistics, sub_type, team_id):
-        self.champion_id = champion_id
-        self.create_date = create_date
-        self.fellow_players = fellow_players
-        self.game_id = game_id
-        self.game_mode = game_mode
-        self.game_type = game_type
-        self.invalid = invalid
-        self.level = level
-        self.map_id = map_id
-        self.spell1 = spell1
-        self.spell2 = spell2
-        self.statistics = statistics
-        self.sub_type = sub_type
-        self.team_id = team_id
+    def __init__(self, **kwargs):
+        self.champion_id = kwargs['championId']
+        self.create_date = utils.convert_epoch_millis_to_datetime(kwargs['createDate'])
+
+        players = []
+        for player in kwargs['fellowPlayers']:
+            players.append(Player(**player))
+        self.fellow_players = players
+
+        self.game_id = kwargs['gameId']
+        self.game_mode = kwargs['gameMode']
+        self.game_type = kwargs['gameType']
+        self.invalid = kwargs['invalid']
+        self.level = kwargs['level']
+        self.map_id = kwargs['mapId']
+        self.spell1 = kwargs['spell1']
+        self.spell2 = kwargs['spell2']
+
+        stats = []
+        for stat in kwargs['statistics']:
+            stats.append(RawStat(**stat))
+        self.statistics = stats
+
+        self.sub_type = kwargs['subType']
+        self.team_id = kwargs['teamId']
 
 
 class Player(object):
@@ -90,10 +96,10 @@ class Player(object):
     summonerId  long    Summoner id associated with player.
     teamId      int     Team id associated with player.
     """
-    def __init__(self, champion_id, summoner_id, team_id):
-        self.champion_id = champion_id
-        self.summoner_id = summoner_id
-        self.team_id = team_id
+    def __init__(self, **kwargs):
+        self.champion_id = kwargs['championId']
+        self.summoner_id = kwargs['summonerId']
+        self.team_id = kwargs['teamId']
 
 
 class RawStat(object):
@@ -102,10 +108,10 @@ class RawStat(object):
     name    string      Raw stat name.
     value   int Raw     stat value.
     """
-    def __init__(self, stat_id, name, value):
-        self.id = stat_id
-        self.name = name
-        self.value = value
+    def __init__(self, **kwargs):
+        self.id = kwargs['id']
+        self.name = kwargs['name']
+        self.value = kwargs['value']
 
 
 class League(object):
@@ -115,11 +121,15 @@ class League(object):
     queue       string                  (legal values: RANKED_SOLO_5x5, RANKED_TEAM_3x3, RANKED_TEAM_5x5)
     tier        string                  (legal values: CHALLENGER, DIAMOND, PLATINUM, GOLD, SILVER, BRONZE)
     """
-    def __init__(self, entries, name, queue, tier):
+    def __init__(self, **kwargs):
+        entries = []
+        for entry in kwargs['entries']:
+            entries.append(LeagueItem(**entry))
         self.entries = entries
-        self.name = name
-        self.queue = queue
-        self.tier = tier
+
+        self.name = kwargs['name']
+        self.queue = kwargs['queue']
+        self.tier = kwargs['tier']
 
 
 class LeagueItem(object):
@@ -139,24 +149,24 @@ class LeagueItem(object):
     tier                string  
     wins                int
     """
-    def __init__(self, is_fresh_blood, is_hot_streak, is_inactive, 
-            is_veteran, last_played, league_name, league_points,
-            mini_series, player_or_team_id, player_or_team_name,
-            queue_type, rank, tier, wins):
-        self.is_fresh_blood = is_fresh_blood
-        self.is_hot_streak = is_hot_streak
-        self.is_inactive = is_inactive
-        self.is_veteran = is_veteran
-        self.last_played = last_played
-        self.league_name = league_name
-        self.league_points = league_points
-        self.mini_series = mini_series
-        self.player_or_team_id = player_or_team_id
-        self.player_or_team_name = player_or_team_name
-        self.queue_type = queue_type
-        self.rank = rank
-        self.tier = tier
-        self.wins = wins
+    def __init__(self, **kwargs):
+        self.is_fresh_blood = kwargs['isFreshBlood']
+        self.is_hot_streak = kwargs['isHotStreak']
+        self.is_inactive = kwargs['isInactive']
+        self.is_veteran = kwargs['isVeteran']
+        self.last_played = kwargs['lastPlayed']
+        self.league_name = kwargs['leagueName']
+        self.league_points = kwargs['leaguePoints']
+
+        if 'miniSeries' in kwargs:
+            self.mini_series = MiniSeries(**kwargs['miniSeries'])
+
+        self.player_or_team_id = kwargs['playerOrTeamId']
+        self.player_or_team_name = kwargs['playerOrTeamName']
+        self.queue_type = kwargs['queueType']
+        self.rank = kwargs['rank']
+        self.tier = kwargs['tier']
+        self.wins = kwargs['wins']
 
 
 class MiniSeries(object):
@@ -167,12 +177,12 @@ class MiniSeries(object):
     timeLeftToPlayMillis    long    
     wins                    int
     """
-    def __init__(self, losses, progress, target, time_left_to_play_millis, wins):
-        self.losses = losses
-        self.progress = progress
-        self.target = target
-        self.time_left_to_play_millis = time_left_to_play_millis
-        self.wins = wins
+    def __init__(self, **kwargs):
+        self.losses = kwargs['losses']
+        self.progress = kwargs['progress']
+        self.target = kwargs['target']
+        self.time_left_to_play_millis = kwargs['timeLeftToPlayMillis']
+        self.wins = kwargs['wins']
 
 
 class PlayerStatsSummary(object):
@@ -183,12 +193,12 @@ class PlayerStatsSummary(object):
     playerStatSummaryType   string                  Player stats summary type. (legal values: AramUnranked5x5, CoopVsAI, OdinUnranked, RankedPremade3x3, RankedPremade5x5, RankedSolo5x5, RankedTeam3x3, RankedTeam5x5, Unranked, Unranked3x3, OneForAll5x5, FirstBlood1x1, FirstBlood2x2)
     wins                    int                     Number of wins for this queue type.
     """
-    def __init__(self, aggregated_stats, losses, modify_date, player_stat_summary_type, wins):
-        self.aggregated_stats = aggregated_stats
-        self.losses = losses
-        self.modify_date = modify_date
-        self.player_stat_summary_type = player_stat_summary_type
-        self.wins = wins
+    def __init__(self, **kwargs):
+        self.aggregated_stats = AggregatedStats(**kwargs['aggregatedStats'])
+        self.losses = kwargs['losses']
+        self.modify_date = utils.convert_epoch_millis_to_datetime(kwargs['modifyDate'])
+        self.player_stat_summary_type = kwargs['playerStatSummaryType']
+        self.wins = kwargs['wins']
 
 
 class PlayerRankedStats(object):
@@ -197,10 +207,14 @@ class PlayerRankedStats(object):
     modifyDate      long                        Date stats were last modified specified as epoch milliseconds.
     summonerId      long                        Summoner ID.
     """
-    def __init__(self, champions, modify_date, summoner_id):
+    def __init__(self, **kwargs):
+        champions = []
+        for champion in kwargs['champions']:
+            champions.append(ChampionStats(**champion))
         self.champions = champions
-        self.modify_date = modify_date
-        self.summoner_id = summoner_id
+
+        self.modify_date = utils.convert_epoch_millis_to_datetime(kwargs['modifyDate'])
+        self.summoner_id = kwargs['summonerId']
 
 
 class ChampionStats(object):
@@ -209,10 +223,10 @@ class ChampionStats(object):
     name        string                  Champion name.
     stats       AggregatedStatsDto      Aggregated stats associated with the champion.
     """
-    def __init__(self, champion_id, name, stats):
-        self.id = champion_id
-        self.name = name
-        self.stats = stats
+    def __init__(self, **kwargs):
+        self.id = kwargs['id']
+        self.name = kwargs['name']
+        self.stats = AggregatedStats(**kwargs['stats'])
 
 
 class AggregatedStats(object):
@@ -272,73 +286,115 @@ class AggregatedStats(object):
     totalTurretsKilled              int 
     totalUnrealKills                int
     """
-    def __init__(self, average_assists, average_champions_killed, average_combat_player_score,
-            average_node_capture, average_node_capture_assist, average_node_neutralize, average_node_neutralize_assist,
-            average_num_deaths, average_objective_player_score, average_team_objective, average_total_player_score,
-            bot_games_played, killing_spree, max_assists, max_champions_killed, max_combat_player_score,
-            max_largest_critical_strike, max_largest_killing_spree, max_node_capture, max_node_capture_assist,
-            max_node_neutralize, max_node_neutralize_assist, max_objective_player_score, max_team_objective,
-            max_time_played, max_time_spent_living, max_total_player_score, most_champion_kills_per_session,
-            most_spells_cast, normal_games_played, ranked_premade_games_played, ranked_solo_games_played,
-            total_assists, total_champion_kills, total_damage_dealt, total_damage_taken, total_double_kills,
-            total_first_blood, total_gold_earned, total_heal, total_magic_damage_dealt, total_minion_kills,
-            total_neutral_minions_killed, total_node_capture, total_node_neutralize, total_penta_kills,
-            total_physical_damage_dealt, total_quadra_kills, total_sessions_lost, total_sessions_played,
-            total_sessions_won, total_triple_kills, total_turrets_killed, total_unreal_kills):
-        self.average_assists = average_assists
-        self.average_champions_killed = average_champions_killed
-        self.average_combat_player_score = average_combat_player_score
-        self.average_node_capture = average_node_capture
-        self.average_node_capture_assist = average_node_capture_assist
-        self.average_node_neutralize = average_node_neutralize
-        self.average_node_neutralize_assist = average_node_neutralize_assist
-        self.average_num_deaths = average_num_deaths
-        self.average_objective_player_score = average_objective_player_score
-        self.average_team_objective = average_team_objective
-        self.average_total_player_score = average_total_player_score
-        self.bot_games_played = bot_games_played
-        self.killing_spree = killing_spree
-        self.max_assists = max_assists
-        self.max_champions_killed = max_champions_killed
-        self.max_combat_player_score = max_combat_player_score
-        self.max_largest_critical_strike = max_largest_critical_strike
-        self.max_largest_killing_spree = max_largest_killing_spree
-        self.max_node_capture = max_node_capture
-        self.max_node_capture_assist = max_node_capture_assist
-        self.max_node_neutralize = max_node_neutralize
-        self.max_node_neutralize_assist = max_node_neutralize_assist
-        self.max_objective_player_score = max_objective_player_score
-        self.max_team_objective = max_team_objective
-        self.max_time_played = max_time_played
-        self.max_time_spent_living = max_time_spent_living
-        self.max_total_player_score = max_total_player_score
-        self.most_champion_kills_per_session = most_champion_kills_per_session
-        self.most_spells_cast = most_spells_cast
-        self.normal_games_played = normal_games_played
-        self.ranked_premade_games_played = ranked_premade_games_played
-        self.ranked_solo_games_played = ranked_solo_games_played
-        self.total_assists = total_assists
-        self.total_champion_kills = total_champion_kills
-        self.total_damage_dealt = total_damage_dealt
-        self.total_damage_taken = total_damage_taken
-        self.total_double_kills = total_double_kills
-        self.total_first_blood = total_first_blood
-        self.total_gold_earned = total_gold_earned
-        self.total_heal = total_heal
-        self.total_magic_damage_dealt = total_magic_damage_dealt
-        self.total_minion_kills = total_minion_kills
-        self.total_neutral_minions_killed = total_neutral_minions_killed
-        self.total_node_capture = total_node_capture
-        self.total_node_neutralize = total_node_neutralize
-        self.total_penta_kills = total_penta_kills
-        self.total_physical_damage_dealt = total_physical_damage_dealt
-        self.total_quadra_kills = total_quadra_kills
-        self.total_sessions_lost = total_sessions_lost
-        self.total_sessions_played = total_sessions_played
-        self.total_sessions_won = total_sessions_won
-        self.total_triple_kills = total_triple_kills
-        self.total_turrets_killed = total_turrets_killed
-        self.total_unreal_kills = total_unreal_kills
+    def __init__(self, **kwargs):
+        if 'averageAssists' in kwargs:
+            self.average_assists = kwargs['averageAssists']
+        if 'averageChampionsKilled' in kwargs:
+            self.average_champions_killed = kwargs['averageChampionsKilled']
+        if 'averageCombatPlayerScore' in kwargs:
+            self.average_combat_player_score = kwargs['averageCombatPlayerScore']
+        if 'averageNodeCapture' in kwargs:
+            self.average_node_capture = kwargs['averageNodeCapture']
+        if 'averageNodeCaptureAssist' in kwargs:
+            self.average_node_capture_assist = kwargs['averageNodeCaptureAssist']
+        if 'averageNodeNeutralize' in kwargs:
+            self.average_node_neutralize = kwargs['averageNodeNeutralize']
+        if 'averageNodeNeutralizeAssist' in kwargs:
+            self.average_node_neutralize_assist = kwargs['averageNodeNeutralizeAssist']
+        if 'averageNumDeaths' in kwargs:
+            self.average_num_deaths = kwargs['averageNumDeaths']
+        if 'averageObjectivePlayerScore' in kwargs:
+            self.average_objective_player_score = kwargs['averageObjectivePlayerScore']
+        if 'averageTeamObjective' in kwargs:
+            self.average_team_objective = kwargs['averageTeamObjective']
+        if 'averageTotalPlayerScore' in kwargs:
+            self.average_total_player_score = kwargs['averageTotalPlayerScore']
+        if 'botGamesPlayed' in kwargs:
+            self.bot_games_played = kwargs['botGamesPlayed']
+        if 'killingSpree' in kwargs:
+            self.killing_spree = kwargs['killingSpree']
+        if 'maxAssists' in kwargs:
+            self.max_assists = kwargs['maxAssists']
+        if 'maxChampionsKilled' in kwargs:
+            self.max_champions_killed = kwargs['maxChampionsKilled']
+        if 'maxCombatPlayerScore' in kwargs:
+            self.max_combat_player_score = kwargs['maxCombatPlayerScore']
+        if 'maxLargestCriticalStrike' in kwargs:
+            self.max_largest_critical_strike = kwargs['maxLargestCriticalStrike']
+        if 'maxLargestKillingSpree' in kwargs:
+            self.max_largest_killing_spree = kwargs['maxLargestKillingSpree']
+        if 'maxNodeCapture' in kwargs:
+            self.max_node_capture = kwargs['maxNodeCapture']
+        if 'maxNodeCaptureAssist' in kwargs:
+            self.max_node_capture_assist = kwargs['maxNodeCaptureAssist']
+        if 'maxNodeNeutralize' in kwargs:
+            self.max_node_neutralize = kwargs['maxNodeNeutralize']
+        if 'maxNodeNeutralizeAssist' in kwargs:
+            self.max_node_neutralize_assist = kwargs['maxNodeNeutralizeAssist']
+        if 'maxObjectivePlayerScore' in kwargs:
+            self.max_objective_player_score = kwargs['maxObjectivePlayerScore']
+        if 'maxTeamObjective' in kwargs:
+            self.max_team_objective = kwargs['maxTeamObjective']
+        if 'maxTimePlayed' in kwargs:
+            self.max_time_played = kwargs['maxTimePlayed']
+        if 'maxTimeSpentLiving' in kwargs:
+            self.max_time_spent_living = kwargs['maxTimeSpentLiving']
+        if 'maxTotalPlayerScore' in kwargs:
+            self.max_total_player_score = kwargs['maxTotalPlayerScore']
+        if 'mostChampionKillsPerSession' in kwargs:
+            self.most_champion_kills_per_session = kwargs['mostChampionKillsPerSession']
+        if 'mostSpellsCast' in kwargs:
+            self.most_spells_cast = kwargs['mostSpellsCast']
+        if 'normalGamesPlayed' in kwargs:
+            self.normal_games_played = kwargs['normalGamesPlayed']
+        if 'rankedPremadeGamesPlayed' in kwargs:
+            self.ranked_premade_games_played = kwargs['rankedPremadeGamesPlayed']
+        if 'rankedSoloGamesPlayed' in kwargs:
+            self.ranked_solo_games_played = kwargs['rankedSoloGamesPlayed']
+        if 'totalAssists' in kwargs:
+            self.total_assists = kwargs['totalAssists']
+        if 'totalChampionKills' in kwargs:
+            self.total_champion_kills = kwargs['totalChampionKills']
+        if 'totalDamageDealt' in kwargs:
+            self.total_damage_dealt = kwargs['totalDamageDealt']
+        if 'totalDamageTaken' in kwargs:
+            self.total_damage_taken = kwargs['totalDamageTaken']
+        if 'totalDoubleKills' in kwargs:
+            self.total_double_kills = kwargs['totalDoubleKills']
+        if 'totalFirstBlood' in kwargs:
+            self.total_first_blood = kwargs['totalFirstBlood']
+        if 'totalGoldEarned' in kwargs:
+            self.total_gold_earned = kwargs['totalGoldEarned']
+        if 'totalHeal' in kwargs:
+            self.total_heal = kwargs['totalHeal']
+        if 'totalMagicDamageDealt' in kwargs:
+            self.total_magic_damage_dealt = kwargs['totalMagicDamageDealt']
+        if 'totalMinionKills' in kwargs:
+            self.total_minion_kills = kwargs['totalMinionKills']
+        if 'totalNeutralMinionsKilled' in kwargs:
+            self.total_neutral_minions_killed = kwargs['totalNeutralMinionsKilled']
+        if 'totalNodeCapture' in kwargs:
+            self.total_node_capture = kwargs['totalNodeCapture']
+        if 'totalNodeNeutralize' in kwargs:
+            self.total_node_neutralize = kwargs['totalNodeNeutralize']
+        if 'totalPentaKills' in kwargs:
+            self.total_penta_kills = kwargs['totalPentaKills']
+        if 'totalPhysicalDamageDealt' in kwargs:
+            self.total_physical_damage_dealt = kwargs['totalPhysicalDamageDealt']
+        if 'totalQuadraKills' in kwargs:
+            self.total_quadra_kills = kwargs['totalQuadraKills']
+        if 'totalSessionsLost' in kwargs:
+            self.total_sessions_lost = kwargs['totalSessionsLost']
+        if 'totalSessionsPlayed' in kwargs:
+            self.total_sessions_played = kwargs['totalSessionsPlayed']
+        if 'totalSessionsWon' in kwargs:
+            self.total_sessions_won = kwargs['totalSessionsWon']
+        if 'totalTripleKills' in kwargs:
+            self.total_triple_kills = kwargs['totalTripleKills']
+        if 'totalTurretsKilled' in kwargs:
+            self.total_turrets_killed = kwargs['totalTurretsKilled']
+        if 'totalUnrealKills' in kwargs:
+            self.total_unreal_kills = kwargs['totalUnrealKills']
 
 
 class MasteryPage(object):
@@ -348,11 +404,16 @@ class MasteryPage(object):
     name        string              Mastery page name.
     talents     List[TalentDto]     List of mastery page talents associated with the mastery page.
     """
-    def __init__(self, current, page_id, name, talents):
-        self.current = current
-        self.id = page_id
-        self.name = name
-        self.talents = talents
+    def __init__(self, **kwargs):
+        self.current = kwargs['current']
+        self.id = kwargs['id']
+        self.name = kwargs['name']
+
+        if 'talents' in kwargs:
+            talents = []
+            for talent in kwargs['talents']:
+                talents.append(Talent(**talent))
+            self.talents = talents
 
 
 class Talent(object):
@@ -361,10 +422,10 @@ class Talent(object):
     name    string      Talent name.
     rank    int         Talent rank.
     """
-    def __init__(self, talent_id, name, rank):
-        self.id = talent_id
-        self.name = name
-        self.rank = rank
+    def __init__(self, **kwargs):
+        self.id = kwargs['id']
+        self.name = kwargs['name']
+        self.rank = kwargs['rank']
 
 
 class RunePage(object):
@@ -374,11 +435,16 @@ class RunePage(object):
     name        string              Rune page name.
     slots       List[RuneSlotDto]   List of rune slots associated with the rune page.
     """
-    def __init__(self, current, page_id, name, slots):
-        self.current = current
-        self.id = page_id
-        self.name = name
-        self.slots = slots
+    def __init__(self, **kwargs):
+        self.current = kwargs['current']
+        self.id = kwargs['id']
+        self.name = kwargs['name']
+
+        if 'slots' in kwargs:
+            slots = []
+            for slot in kwargs['slots']:
+                slots.append(RuneSlot(**slot))
+            self.slots = slots
 
 
 class RuneSlot(object):
@@ -386,9 +452,9 @@ class RuneSlot(object):
     rune            RuneDto     Rune associated with the rune slot.
     runeSlotId      int         Rune slot ID.
     """
-    def __init__(self, rune, rune_slot_id):
-        self.rune = rune
-        self.id = rune_slot_id
+    def __init__(self, **kwargs):
+        self.rune = Rune(**kwargs['rune'])
+        self.id = kwargs['runeSlotId']
 
 
 class Rune(object):
@@ -398,11 +464,11 @@ class Rune(object):
     name            string      Rune name.
     tier            int         Rune tier.
     """
-    def __init__(self, description, rune_id, name, tier):
-        self.description = description
-        self.id = rune_id
-        self.name = name
-        self.tier = tier
+    def __init__(self, **kwargs):
+        self.description = kwargs['description']
+        self.id = kwargs['id']
+        self.name = kwargs['name']
+        self.tier = kwargs['tier']
 
 
 class Team(object):
@@ -423,25 +489,28 @@ class Team(object):
     teamStatSummary                 TeamStatSummaryDto  
     thirdLastJoinDate               Date
     """
-    def __init__(self, create_date, full_id, last_game_date, last_join_date,
-            last_joined_ranked_team_queue_date, match_history, message_of_day,
-            modify_date, name, roster, second_last_join_date, status, tag,
-            team_stat_summary, third_last_join_date):
-        self.create_date = create_date
-        self.full_id = full_id
-        self.last_game_date = last_game_date
-        self.last_join_date = last_join_date
-        self.last_joined_ranked_team_queue_date = last_joined_ranked_team_queue_date
+    def __init__(self, **kwargs):
+        self.create_date = utils.convert_epoch_millis_to_datetime(kwargs['createDate'])
+        self.full_id = kwargs['fullId']
+        self.last_game_date = utils.convert_epoch_millis_to_datetime(kwargs['lastGameDate'])
+        self.last_join_date = utils.convert_epoch_millis_to_datetime(kwargs['lastJoinDate'])
+        self.last_joined_ranked_team_queue_date = utils.convert_epoch_millis_to_datetime(kwargs['lastJoinedRankedTeamQueueDate'])
+        
+        match_history = []
+        for match in kwargs['matchHistory']:
+            match_history.append(MatchHistorySummary(**match))
         self.match_history = match_history
-        self.message_of_day = message_of_day
-        self.modify_date = modify_date
-        self.name = name
-        self.roster = roster
-        self.second_last_join_date = second_last_join_date
-        self.status = status
-        self.tag = tag
-        self.team_stat_summary = team_stat_summary
-        self.third_last_join_date = third_last_join_date
+
+        if 'messageOfDay' in kwargs:
+            self.message_of_day = MessageOfDay(**kwargs['messageOfDay'])
+        self.modify_date = utils.convert_epoch_millis_to_datetime(kwargs['modifyDate'])
+        self.name = kwargs['name']
+        self.roster = Roster(**kwargs['roster'])
+        self.second_last_join_date = utils.convert_epoch_millis_to_datetime(kwargs['secondLastJoinDate'])
+        self.status = kwargs['status']
+        self.tag = kwargs['tag']
+        self.team_stat_summary = TeamStatSummary(**kwargs['teamStatSummary'])
+        self.third_last_join_date = utils.convert_epoch_millis_to_datetime(kwargs['thirdLastJoinDate'])
 
 
 class MatchHistorySummary(object):
@@ -457,18 +526,17 @@ class MatchHistorySummary(object):
     opposingTeamName    string  
     win                 boolean
     """
-    def __init__(self, assists, deaths, game_id, game_mode, invalid, kills,
-            map_id, opposing_team_kills, opposing_team_name, win):
-        self.assists = assists
-        self.deaths = deaths
-        self.game_id = game_id
-        self.game_mode = game_mode
-        self.invalid = invalid
-        self.kills = kills
-        self.map_id = map_id
-        self.opposing_team_kills = opposing_team_kills
-        self.opposing_team_name = opposing_team_name
-        self.win = win
+    def __init__(self, **kwargs):
+        self.assists = kwargs['assists']
+        self.deaths = kwargs['deaths']
+        self.game_id = kwargs['gameId']
+        self.game_mode = kwargs['gameMode']
+        self.invalid = kwargs['invalid']
+        self.kills = kwargs['kills']
+        self.map_id = kwargs['mapId']
+        self.opposing_team_kills = kwargs['opposingTeamKills']
+        self.opposing_team_name = kwargs['opposingTeamName']
+        self.win = kwargs['win']
 
 
 class MessageOfDay(object):
@@ -477,10 +545,10 @@ class MessageOfDay(object):
     message         string  
     version         int
     """
-    def __init__(self, create_date, message, version):
-        self.create_date = create_date
-        self.message = message
-        self.version = version
+    def __init__(self, **kwargs):
+        self.create_date = utils.convert_epoch_millis_to_datetime(kwargs['createDate'])
+        self.message = kwargs['message']
+        self.version = kwargs['version']
 
 
 class Roster(object):
@@ -488,9 +556,13 @@ class Roster(object):
     memberList      List[TeamMemberInfoDto] 
     ownerId         long
     """
-    def __init__(self, member_list, owner_id):
+    def __init__(self, **kwargs):
+        member_list = []
+        for member in kwargs['memberList']:
+            member_list.append(TeamMemberInfo(**member))
         self.member_list = member_list
-        self.owner_id = owner_id
+
+        self.owner_id = kwargs['ownerId']
 
 
 class TeamStatSummary(object):
@@ -498,8 +570,12 @@ class TeamStatSummary(object):
     fullId              string  
     teamStatDetails     Set[TeamStatDetailDto]
     """
-    def __init__(self, full_id, team_stat_details):
-        self.full_id = full_id
+    def __init__(self, **kwargs):
+        self.full_id = kwargs['fullId']
+
+        team_stat_details = []
+        for team_stat_detail in kwargs['teamStatDetails']:
+            team_stat_details.append(TeamStatDetail(**team_stat_detail))
         self.team_stat_details = team_stat_details
 
 
@@ -510,11 +586,11 @@ class TeamMemberInfo(object):
     playerId        long    
     status          string
     """
-    def __init__(self, invite_date, join_date, player_id, status):
-        self.invite_date = invite_date
-        self.join_date = join_date
-        self.player_id = player_id
-        self.status = status
+    def __init__(self, **kwargs):
+        self.invite_date = utils.convert_epoch_millis_to_datetime(kwargs['inviteDate'])
+        self.join_date = utils.convert_epoch_millis_to_datetime(kwargs['joinDate'])
+        self.player_id = kwargs['playerId']
+        self.status = kwargs['status']
 
 
 class TeamStatDetail(object):
@@ -525,9 +601,9 @@ class TeamStatDetail(object):
     teamStatType            string  
     wins                    int
     """
-    def __init__(self, average_games_played, full_id, losses, team_stat_type, wins):
-        self.average_games_played = average_games_played
-        self.full_id = full_id
-        self.losses = losses
-        self.team_stat_type = team_stat_type
-        self.wins = wins
+    def __init__(self, **kwargs):
+        self.average_games_played = kwargs['averageGamesPlayed']
+        self.full_id = kwargs['fullId']
+        self.losses = kwargs['losses']
+        self.team_stat_type = kwargs['teamStatType']
+        self.wins = kwargs['wins']
