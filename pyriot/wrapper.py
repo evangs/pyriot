@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import requests
+import api_classes
 
 NORTH_AMERICA = 'na'
 EUROPE_WEST = 'euw'
@@ -50,7 +51,18 @@ class PyRiot:
 
         champions = dict()
         for champion in content['champions']:
-            champions[champion['id']] = champion
+            champions[champion['id']] = api_classes.Champion(
+                    champion['active'], 
+                    champion['attackRank'], 
+                    champion['botEnabled'],
+                    champion['botMmEnabled'],
+                    champion['defenseRank'],
+                    champion['difficultyRank'],
+                    champion['freeToPlay'],
+                    champion['id'],
+                    champion['magicRank'],
+                    champion['name'],
+                    champion['rankedPlayEnabled'])     
 
         return champions
 
@@ -65,7 +77,6 @@ class PyRiot:
 
         championId      int                 Champion ID associated with game.
         createDate      long                Date that end game data was recorded, specified as epoch milliseconds.
-        createDateStr   Date                Human readable string representing date that end game data was recorded.
         fellowPlayers   List[PlayerDto]     Other players associated with the game.
         gameId          long                Game ID.
         gameMode        string              Game mode.
@@ -103,7 +114,39 @@ class PyRiot:
         response.raise_for_status()
         content = response.json()
 
-        return content['games']
+        games = []
+        for game in content['games']:
+            players = []
+            for player in game['fellowPlayers']:
+                players.append(api_classes.Player(
+                        player['championId'],
+                        player['summonerId'],
+                        player['teamId']))
+
+            stats = []
+            for stat in game['statistics']:
+                stats.append(api_classes.RawStat(
+                        stat['id'],
+                        stat['name'],
+                        stat['value']))
+
+            games.append(api_classes.Game(
+                    game['championId'],
+                    game['createDate'],
+                    players,
+                    game['gameId'],
+                    game['gameMode'],
+                    game['gameType'],
+                    game['invalid'],
+                    game['level'],
+                    game['mapId'],
+                    game['spell1'],
+                    game['spell2'],
+                    stats,
+                    game['subType'],
+                    game['teamId']))
+
+        return games
 
     def leagues(self, region, summoner_id):
         """
@@ -157,7 +200,43 @@ class PyRiot:
         response.raise_for_status()
         content = response.json()
 
-        return content
+        leagues = dict()
+        for league_id in content:
+            entries = []
+            for entry in content[league_id]['entries']:
+                if 'miniSeries' in entry:
+                    mini_series = api_classes.MiniSeries(
+                            entry['miniSeries']['losses'], 
+                            entry['miniSeries']['progress'],
+                            entry['miniSeries']['target'],
+                            entry['miniSeries']['timeLeftToPlayMillis'],
+                            entry['miniSeries']['wins'])
+                else:
+                    miniSeries = None
+                entries.append(api_classes.LeagueItem(
+                        entry['isFreshBlood'],
+                        entry['isHotStreak'],
+                        entry['isInactive'],
+                        entry['isVeteran'],
+                        entry['lastPlayed'],
+                        entry['leagueName'],
+                        entry['leaguePoints'],
+                        mini_series,
+                        entry['playerOrTeamId'],
+                        entry['playerOrTeamName'],
+                        entry['queueType'],
+                        entry['rank'],
+                        entry['tier'],
+                        entry['wins']))
+            league = api_classes.League(
+                    entries,
+                    content[league_id]['name'],
+                    content[league_id]['queue'],
+                    content[league_id]['tier'])
+
+            leagues[league_id] = league
+
+        return leagues
 
     def stats_summary(self, region, summoner_id, season=None):
         """
@@ -251,7 +330,74 @@ class PyRiot:
         response.raise_for_status()
         content = response.json()
 
-        return content['playerStatSummaries']
+        player_stat_summaries = []
+        for stat_summary in content['playerStatSummaries']:
+            aggregated_stats = api_classes.AggregatedStats(
+                    stat_summary['aggregatedStats'].get('averageAssists', None),
+                    stat_summary['aggregatedStats'].get('averageChampionsKilled', None),
+                    stat_summary['aggregatedStats'].get('averageCombatPlayerScore', None),
+                    stat_summary['aggregatedStats'].get('averageNodeCapture', None),
+                    stat_summary['aggregatedStats'].get('averageNodeCaptureAssist', None),
+                    stat_summary['aggregatedStats'].get('averageNodeNeutralize', None),
+                    stat_summary['aggregatedStats'].get('averageNodeNeutralizeAssist', None),
+                    stat_summary['aggregatedStats'].get('averageNumDeaths', None),
+                    stat_summary['aggregatedStats'].get('averageObjectivePlayerScore', None),
+                    stat_summary['aggregatedStats'].get('averageTeamObjective', None),
+                    stat_summary['aggregatedStats'].get('averageTotalPlayerScore', None),
+                    stat_summary['aggregatedStats'].get('botGamesPlayed', None),
+                    stat_summary['aggregatedStats'].get('killingSpree', None),
+                    stat_summary['aggregatedStats'].get('maxAssists', None),
+                    stat_summary['aggregatedStats'].get('maxChampionsKilled', None),
+                    stat_summary['aggregatedStats'].get('maxCombatPlayerScore', None),
+                    stat_summary['aggregatedStats'].get('maxLargestCriticalStrike', None),
+                    stat_summary['aggregatedStats'].get('maxLargestKillingSpree', None),
+                    stat_summary['aggregatedStats'].get('maxNodeCapture', None),
+                    stat_summary['aggregatedStats'].get('maxNodeCaptureAssist', None),
+                    stat_summary['aggregatedStats'].get('maxNodeNeutralize', None),
+                    stat_summary['aggregatedStats'].get('maxNodeNeutralizeAssist', None),
+                    stat_summary['aggregatedStats'].get('maxObjectivePlayerScore', None),
+                    stat_summary['aggregatedStats'].get('maxTeamObjective', None),
+                    stat_summary['aggregatedStats'].get('maxTimePlayed', None),
+                    stat_summary['aggregatedStats'].get('maxTimeSpentLiving', None),
+                    stat_summary['aggregatedStats'].get('maxTotalPlayerScore', None),
+                    stat_summary['aggregatedStats'].get('mostChampionKillsPerSession', None),
+                    stat_summary['aggregatedStats'].get('mostSpellsCast', None),
+                    stat_summary['aggregatedStats'].get('normalGamesPlayed', None),
+                    stat_summary['aggregatedStats'].get('rankedPremadeGamesPlayed', None),
+                    stat_summary['aggregatedStats'].get('rankedSoloGamesPlayed', None),
+                    stat_summary['aggregatedStats'].get('totalAssists', None),
+                    stat_summary['aggregatedStats'].get('totalChampionKills', None),
+                    stat_summary['aggregatedStats'].get('totalDamageDealt', None),
+                    stat_summary['aggregatedStats'].get('totalDamageTaken', None),
+                    stat_summary['aggregatedStats'].get('totalDoubleKills', None),
+                    stat_summary['aggregatedStats'].get('totalFirstBlood', None),
+                    stat_summary['aggregatedStats'].get('totalGoldEarned', None),
+                    stat_summary['aggregatedStats'].get('totalHeal', None),
+                    stat_summary['aggregatedStats'].get('totalMagicDamageDealt', None),
+                    stat_summary['aggregatedStats'].get('totalMinionKills', None),
+                    stat_summary['aggregatedStats'].get('totalNeutralMinionsKilled', None),
+                    stat_summary['aggregatedStats'].get('totalNodeCapture', None),
+                    stat_summary['aggregatedStats'].get('totalNodeNeutralize', None),
+                    stat_summary['aggregatedStats'].get('totalPentaKills', None),
+                    stat_summary['aggregatedStats'].get('totalPhysicalDamageDealt', None),
+                    stat_summary['aggregatedStats'].get('totalQuadraKills', None),
+                    stat_summary['aggregatedStats'].get('totalSessionsLost', None),
+                    stat_summary['aggregatedStats'].get('totalSessionsPlayed', None),
+                    stat_summary['aggregatedStats'].get('totalSessionsWon', None),
+                    stat_summary['aggregatedStats'].get('totalTripleKills', None),
+                    stat_summary['aggregatedStats'].get('totalTurretsKilled', None),
+                    stat_summary['aggregatedStats'].get('totalUnrealKills', None))
+
+            player_stats_summary = api_classes.PlayerStatsSummary(
+                    aggregated_stats,
+                    stat_summary['losses'],
+                    stat_summary['modifyDate'],
+                    stat_summary['playerStatSummaryType'],
+                    stat_summary['wins'])
+
+            player_stat_summaries.append(player_stats_summary)
+
+        return player_stat_summaries
 
     def stats_ranked(self, region, summoner_id, season=None):
         """
@@ -343,6 +489,9 @@ class PyRiot:
         response = requests.get(url)
         response.raise_for_status()
         content = response.json()
+
+        for champion in content['champions']:
+
 
         return content
 
