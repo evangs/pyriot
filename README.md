@@ -22,49 +22,51 @@ Example
 
 Wrapper Functions
 -----------------
-champions(region, free_to_play=False)
+For more in-depth documentation, look at the source code pyriot/wrapper.py
+
+*champions(region, free_to_play=False)*
 + region - use the region constants in wrapper.py
 + free_to_play - flag when set to true only returns free to play champions
 
-recent_games(region, summoner_id)
+*recent_games(region, summoner_id)*
 + region - use the region constants in wrapper.py
 + summoner_id - the summoner id can be obtained by calling the summoner_get_by_name function
 
-leagues(region, summoner_id)
+*leagues(region, summoner_id)*
 + region - use the region constants in wrapper.py
 + summoner_id - the summoner id can be obtained by calling the summoner_get_by_name function
 
-stats_summary(region, summoner_id, season=None)
-+ region - use the region constants in wrapper.py
-+ summoner_id - the summoner id can be obtained by calling the summoner_get_by_name function
-+ season - integer representation of the season (1, 2, 3, etc)
-
-stats_ranked(region, summoner_id, season=None)
+*stats_summary(region, summoner_id, season=None)*
 + region - use the region constants in wrapper.py
 + summoner_id - the summoner id can be obtained by calling the summoner_get_by_name function
 + season - integer representation of the season (1, 2, 3, etc)
 
-summoner_masteries(region, summoner_id)
+*stats_ranked(region, summoner_id, season=None)*
++ region - use the region constants in wrapper.py
++ summoner_id - the summoner id can be obtained by calling the summoner_get_by_name function
++ season - integer representation of the season (1, 2, 3, etc)
+
+*summoner_masteries(region, summoner_id)*
 + region - use the region constants in wrapper.py
 + summoner_id - the summoner id can be obtained by calling the summoner_get_by_name function
 
-summoner_runes(region, summoner_id)
+*summoner_runes(region, summoner_id)*
 + region - use the region constants in wrapper.py
 + summoner_id - the summoner id can be obtained by calling the summoner_get_by_name function
 
-summoner_get_by_name(region, summoner_name)
+*summoner_get_by_name(region, summoner_name)*
 + region - use the region constants in wrapper.py
 + summoner_name - name of the summoner
 
-summoner_get_by_id(region, summoner_id)
+*summoner_get_by_id(region, summoner_id)*
 + region - use the region constants in wrapper.py
 + summoner_id - the summoner id can be obtained by calling the summoner_get_by_name function
 
-summoner_get_names_for_ids(region, summoner_ids)
+*summoner_get_names_for_ids(region, summoner_ids)*
 + region - use the region constants in wrapper.py
 + summoner_ids - comma separated string of summoner ids
 
-teams(region, summoner_id)
+*teams(region, summoner_id)*
 + region - use the region constants in wrapper.py
 + summoner_id - the summoner id can be obtained by calling the summoner_get_by_name function
 
