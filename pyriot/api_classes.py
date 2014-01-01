@@ -17,6 +17,23 @@ class Summoner(object):
         self.revision_date = utils.convert_epoch_millis_to_datetime(kwargs['revisionDate'])
         self.summoner_level = kwargs['summonerLevel']
 
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
+
 
 class Champion(object):
     """
@@ -44,6 +61,23 @@ class Champion(object):
         self.magic_rank = kwargs['magicRank']
         self.name = kwargs['name']
         self.ranked_play_enabled = kwargs['rankedPlayEnabled']
+
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
 
 
 class Game(object):
@@ -89,6 +123,23 @@ class Game(object):
         self.sub_type = kwargs['subType']
         self.team_id = kwargs['teamId']
 
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
+
 
 class Player(object):
     """
@@ -101,6 +152,23 @@ class Player(object):
         self.summoner_id = kwargs['summonerId']
         self.team_id = kwargs['teamId']
 
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
+
 
 class RawStat(object):
     """
@@ -112,6 +180,23 @@ class RawStat(object):
         self.id = kwargs['id']
         self.name = kwargs['name']
         self.value = kwargs['value']
+
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
 
 
 class League(object):
@@ -130,6 +215,23 @@ class League(object):
         self.name = kwargs['name']
         self.queue = kwargs['queue']
         self.tier = kwargs['tier']
+
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
 
 
 class LeagueItem(object):
@@ -168,6 +270,23 @@ class LeagueItem(object):
         self.tier = kwargs['tier']
         self.wins = kwargs['wins']
 
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
+
 
 class MiniSeries(object):
     """
@@ -183,6 +302,23 @@ class MiniSeries(object):
         self.target = kwargs['target']
         self.time_left_to_play_millis = kwargs['timeLeftToPlayMillis']
         self.wins = kwargs['wins']
+
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
 
 
 class PlayerStatsSummary(object):
@@ -200,6 +336,23 @@ class PlayerStatsSummary(object):
         self.player_stat_summary_type = kwargs['playerStatSummaryType']
         self.wins = kwargs['wins']
 
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
+
 
 class PlayerRankedStats(object):
     """
@@ -216,6 +369,23 @@ class PlayerRankedStats(object):
         self.modify_date = utils.convert_epoch_millis_to_datetime(kwargs['modifyDate'])
         self.summoner_id = kwargs['summonerId']
 
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
+
 
 class ChampionStats(object):
     """
@@ -227,6 +397,23 @@ class ChampionStats(object):
         self.id = kwargs['id']
         self.name = kwargs['name']
         self.stats = AggregatedStats(**kwargs['stats'])
+
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
 
 
 class AggregatedStats(object):
@@ -396,6 +583,23 @@ class AggregatedStats(object):
         if 'totalUnrealKills' in kwargs:
             self.total_unreal_kills = kwargs['totalUnrealKills']
 
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
+
 
 class MasteryPage(object):
     """
@@ -415,6 +619,23 @@ class MasteryPage(object):
                 talents.append(Talent(**talent))
             self.talents = talents
 
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
+
 
 class Talent(object):
     """
@@ -426,6 +647,23 @@ class Talent(object):
         self.id = kwargs['id']
         self.name = kwargs['name']
         self.rank = kwargs['rank']
+
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
 
 
 class RunePage(object):
@@ -446,6 +684,23 @@ class RunePage(object):
                 slots.append(RuneSlot(**slot))
             self.slots = slots
 
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
+
 
 class RuneSlot(object):
     """
@@ -455,6 +710,23 @@ class RuneSlot(object):
     def __init__(self, **kwargs):
         self.rune = Rune(**kwargs['rune'])
         self.id = kwargs['runeSlotId']
+
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
 
 
 class Rune(object):
@@ -469,6 +741,23 @@ class Rune(object):
         self.id = kwargs['id']
         self.name = kwargs['name']
         self.tier = kwargs['tier']
+
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
 
 
 class Team(object):
@@ -512,6 +801,23 @@ class Team(object):
         self.team_stat_summary = TeamStatSummary(**kwargs['teamStatSummary'])
         self.third_last_join_date = utils.convert_epoch_millis_to_datetime(kwargs['thirdLastJoinDate'])
 
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
+
 
 class MatchHistorySummary(object):
     """
@@ -538,6 +844,23 @@ class MatchHistorySummary(object):
         self.opposing_team_name = kwargs['opposingTeamName']
         self.win = kwargs['win']
 
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
+
 
 class MessageOfDay(object):
     """
@@ -549,6 +872,23 @@ class MessageOfDay(object):
         self.create_date = utils.convert_epoch_millis_to_datetime(kwargs['createDate'])
         self.message = kwargs['message']
         self.version = kwargs['version']
+
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
 
 
 class Roster(object):
@@ -564,6 +904,23 @@ class Roster(object):
 
         self.owner_id = kwargs['ownerId']
 
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
+
 
 class TeamStatSummary(object):
     """
@@ -578,6 +935,23 @@ class TeamStatSummary(object):
             team_stat_details.append(TeamStatDetail(**team_stat_detail))
         self.team_stat_details = team_stat_details
 
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
+
 
 class TeamMemberInfo(object):
     """
@@ -591,6 +965,23 @@ class TeamMemberInfo(object):
         self.join_date = utils.convert_epoch_millis_to_datetime(kwargs['joinDate'])
         self.player_id = kwargs['playerId']
         self.status = kwargs['status']
+
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
 
 
 class TeamStatDetail(object):
@@ -607,3 +998,20 @@ class TeamStatDetail(object):
         self.losses = kwargs['losses']
         self.team_stat_type = kwargs['teamStatType']
         self.wins = kwargs['wins']
+
+    def __object_string(self):
+        objdict = self.__dict__
+        object_string = ''
+        for key in objdict:
+            object_string = object_string + '{0}: {1}\n'.format(key, objdict[key])
+
+        return object_string
+
+    def __repr__(self):
+        return self.__object_string()
+
+    def __str__(self):
+        return self.__object_string()
+
+    def __unicode__(self):
+        return self.__object_string()
