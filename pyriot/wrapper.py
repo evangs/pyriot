@@ -3,6 +3,16 @@
 import requests
 import api_classes
 
+# API versions
+# Change version as needed
+CHAMPION_VERSION = 'v1.2'
+GAME_VERSION = 'v1.3'
+LEAGUE_VERSION = 'v2.3'
+STATIC_VERSION = 'v1.2'
+STATS_VERSION = 'v1.3'
+SUMMONER_VERSION = 'v1.4'
+TEAM_VERSION = 'v2.2'
+
 NORTH_AMERICA = 'na'
 EUROPE_WEST = 'euw'
 EUROPE_EAST = 'eune'
@@ -41,7 +51,7 @@ class PyRiot:
         url = '{0}/{1}/{2}/champion?freeToPlay={3}&api_key={4}'.format(
                 self.base_url, 
                 region, 
-                'v1.1', 
+                CHAMPION_VERSION, 
                 free_to_play, 
                 self.api_key)
 
@@ -95,7 +105,7 @@ class PyRiot:
         url = '{0}/{1}/{2}/game/by-summoner/{3}/recent?api_key={4}'.format(
                 self.base_url,
                 region,
-                'v1.2',
+                GAME_VERSION,
                 summoner_id,
                 self.api_key)
 
@@ -153,7 +163,7 @@ class PyRiot:
         url = '{0}/{1}/{2}/league/by-summoner/{3}?api_key={4}'.format(
                 self.base_url,
                 region,
-                'v2.2',
+                LEAGUE_VERSION,
                 summoner_id,
                 self.api_key)
 
@@ -250,7 +260,7 @@ class PyRiot:
         url = '{0}/{1}/{2}/stats/by-summoner/{3}/summary?api_key={4}'.format(
                 self.base_url,
                 region,
-                'v1.2',
+                STATS_VERSION,
                 summoner_id,
                 self.api_key)
 
@@ -347,7 +357,7 @@ class PyRiot:
         url = '{0}/{1}/{2}/stats/by-summoner/{3}/ranked?api_key={4}'.format(
                 self.base_url,
                 region,
-                'v1.2',
+                STATS_VERSION,
                 summoner_id,
                 self.api_key)
 
@@ -389,7 +399,7 @@ class PyRiot:
         url = '{0}/{1}/{2}/summoner/{3}/masteries?api_key={4}'.format(
                 self.base_url,
                 region,
-                'v1.2',
+                SUMMONER_VERSION,
                 summoner_id,
                 self.api_key)
 
@@ -437,7 +447,7 @@ class PyRiot:
         url = '{0}/{1}/{2}/summoner/{3}/runes?api_key={4}'.format(
                 self.base_url,
                 region,
-                'v1.2',
+                SUMMONER_VERSION,
                 summoner_id,
                 self.api_key)
 
@@ -472,7 +482,7 @@ class PyRiot:
         url = '{0}/{1}/{2}/summoner/by-name/{3}?api_key={4}'.format(
                 self.base_url,
                 region,
-                'v1.2',
+                SUMMONER_VERSION,
                 summoner_name,
                 self.api_key)
 
@@ -503,7 +513,7 @@ class PyRiot:
         url = '{0}/{1}/{2}/summoner/{3}?api_key={4}'.format(
                 self.base_url,
                 region,
-                'v1.2',
+                SUMMONER_VERSION,
                 summoner_id,
                 self.api_key)
 
@@ -531,7 +541,7 @@ class PyRiot:
         url = '{0}/{1}/{2}/summoner/{3}/name?api_key={4}'.format(
                 self.base_url,
                 region,
-                'v1.2',
+                SUMMONER_VERSION,
                 summoner_ids,
                 self.api_key)
 
@@ -612,7 +622,7 @@ class PyRiot:
         url = '{0}/{1}/{2}/team/by-summoner/{3}?api_key={4}'.format(
                 self.base_url,
                 region,
-                'v2.2',
+                TEAM_VERSION,
                 summoner_id,
                 self.api_key)
 
