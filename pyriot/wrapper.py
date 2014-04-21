@@ -490,7 +490,7 @@ class PyRiot:
         response.raise_for_status()
         content = response.json()
 
-        return api_classes.Summoner(**content)
+        return api_classes.Summoner(**content.get(summoner_name))
 
     def summoner_get_by_id(self, region, summoner_id):
         """
@@ -521,7 +521,7 @@ class PyRiot:
         response.raise_for_status()
         content = response.json()
 
-        return  api_classes.Summoner(**content)
+        return  api_classes.Summoner(**content.get('{0}'.format(summoner_id)))
 
     def summoner_get_names_for_ids(self, region, summoner_ids):
         """
